@@ -1,1 +1,5 @@
-./Demo/Debug/*
+/Debug/*.exe
+/Debug/*.pdb
+/Demo/Debug/
+/ipch
+/*.sdf

@@ -1,0 +1,37 @@
+Polyspasm is a demo I created in late 2012 for the course
+EDAN35 High Performance Computer Graphics.
+
+The code is written in C++ and is quite ugly due to the time requirements
+that I was working with.
+
+The song used is Kung Fu Goldfish by Linus "lft" Åkesson.
+Parts of the Minecraft map Broville v10 by oldshoes are also used in the demo.
+
+All code is copyright of Jesper Öqvist, and distributed under the GPLv2 license.
+See the LICENSE file for the full GPLv2 license.
+
+
+Ubuntu:
+-------
+
+Required packages:
+
+* libgl1-mesa-dev
+* libglu1-mesa-dev
+* libglew1.5-dev
+* libsdl-mixer1.2-dev
+
+Building:
+---------
+
+1. ./autogen.sh
+2. cd test
+3. ../configure
+4. make
+
+Running:
+--------
+
+Press space to start or pause the demo.
+
+Press G to reset the demo.

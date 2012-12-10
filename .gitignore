@@ -3,3 +3,11 @@
 /Demo/Debug/
 /ipch
 /*.sdf
+/report/*.log
+/report/*.aux
+/report/*.make
+/report/*.bbl
+/report/*.blg
+/report/*.d
+/report/*.fls
+*.swp

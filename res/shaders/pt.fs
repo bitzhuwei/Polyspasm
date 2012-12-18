@@ -119,39 +119,27 @@ int intersect()
 		
 		x0 = (l.x*lev - o.x) * rdx;
 		x1 = x0 + lev * rdx;
-		g0 = x0 > EPSILON;
-		g1 = x1 > EPSILON;
-		x0 = x0 * uint(g0) + INFINITY * uint(!g0);
-		x1 = x1 * uint(g1) + INFINITY * uint(!g1);
-		g2 = x0 < x1;
+		g2 = (x0 > EPSILON && x0 < x1) || (x1 <= EPSILON);
 		x0 = x0 * uint(g2) + x1 * uint(!g2);
 		nx = vec3(1,0,0) * uint(g2) + vec3(-1,0,0) * uint(!g2);
 		
 		y0 = (l.y*lev - o.y) * rdy;
 		y1 = y0 + lev * rdy;
-		g0 = y0 > EPSILON;
-		g1 = y1 > EPSILON;
-		y0 = y0 * uint(g0) + INFINITY * uint(!g0);
-		y1 = y1 * uint(g1) + INFINITY * uint(!g1);
-		g2 = y0 < y1;
+		g2 = (y0 > EPSILON && y0 < y1) || (y1 <= EPSILON);
 		y0 = y0 * uint(g2) + y1 * uint(!g2);
 		ny = vec3(0,1,0) * uint(g2) + vec3(0,-1,0) * uint(!g2);
 		
 		z0 = (l.z*lev - o.z) * rdz;
 		z1 = z0 + lev * rdz;
-		g0 = z0 > EPSILON;
-		g1 = z1 > EPSILON;
-		z0 = z0 * uint(g0) + INFINITY * uint(!g0);
-		z1 = z1 * uint(g1) + INFINITY * uint(!g1);
-		g2 = z0 < z1;
+		g2 = (z0 > EPSILON && z0 < z1) || (z1 <= EPSILON);
 		z0 = z0 * uint(g2) + z1 * uint(!g2);
 		nz = vec3(0,0,1) * uint(g2) + vec3(0,0,-1) * uint(!g2);
 		
-		g2 = x0 < y0;
+		g2 = (x0 > EPSILON && x0 < y0) || (y0 <= EPSILON);
 		t = x0 * uint(g2) + y0 * uint(!g2);
 		n = nx * uint(g2) + ny * uint(!g2);
 		
-		g2 = t < z0;
+		g2 = (t > EPSILON && t < z0) || (z0 <= EPSILON);
 		t = t * uint(g2) + z0 * uint(!g2);
 		n = n * uint(g2) + nz * uint(!g2);
 

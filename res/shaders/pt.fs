@@ -59,7 +59,14 @@ int locate(int node)
 	return int(texelFetch(octree, tc, 0).r);
 }
 
-#define GTYPE float
+const vec3	normals[6] = vec3[6](
+	vec3( 1, 0, 0),
+	vec3(-1, 0, 0),
+	vec3( 0, 1, 0),
+	vec3( 0,-1, 0),
+	vec3( 0, 0, 1),
+	vec3( 0, 0,-1)
+);
 
 /**
  * Ray-octree intersection test
@@ -76,8 +83,8 @@ int intersect()
 	float	tNear = INFINITY;
 	float	t;
 	
-	GTYPE	g0;
-	GTYPE	g1;
+	bool	g0;
+	bool	g1;
 	float	lev;
 
 	float	rdx = 1.0/d.x;
@@ -117,34 +124,33 @@ int intersect()
 		lev = 1<<level;
 		
 		t = (l.x*lev - o.x) * rdx;
-		g0 = GTYPE(t > EPSILON);
-		tNear = t * g0 + tNear * (1-g0);
-		n = vec3(1, 0, 0);
+		g0 = t > EPSILON;
+		tNear = t * uint(g0) + tNear * uint(!g0);
 		
 		t += lev * rdx;
-		g1 = GTYPE(t < tNear && t > EPSILON);
-		tNear = t * g1 + tNear * (1-g1);
-		n = vec3(-1, 0, 0) * g1 + n * (1-g1);
+		g1 = t < tNear && t > EPSILON;
+		tNear = t * uint(g1) + tNear * uint(!g1);
+		n = normals[1] * uint(g1) +  normals[0] * uint(!g1);
 
 		t = (l.y*lev - o.y) * rdy;
-		g0 = GTYPE(t < tNear && t > EPSILON);
-		tNear = t * g0 + tNear * (1-g0);
-		n = vec3(0, 1, 0) * g0 + n * (1-g0);
+		g0 = t < tNear && t > EPSILON;
+		tNear = t * uint(g0) + tNear * uint(!g0);
+		n = normals[2] * uint(g0) +  n * uint(!g0);
 		
 		t += lev * rdy;
-		g1 = GTYPE(t < tNear && t > EPSILON);
-		tNear = t * g1 + tNear * (1-g1);
-		n = vec3(0, -1, 0) * g1 + n * (1-g1);
+		g1 = t < tNear && t > EPSILON;
+		tNear = t * uint(g1) + tNear * uint(!g1);
+		n = normals[3] * uint(g1) +  n * uint(!g1);
 
 		t = (l.z*lev - o.z) * rdz;
-		g0 = GTYPE(t < tNear && t > EPSILON);
-		tNear = t * g0 + tNear * (1-g0);
-		n = vec3(0, 0, 1) * g0 + n * (1-g0);
+		g0 = t < tNear && t > EPSILON;
+		tNear = t * uint(g0) + tNear * uint(!g0);
+		n = normals[4] * uint(g0) +  n * uint(!g0);
 		
 		t += lev * rdz;
-		g1 = GTYPE(t < tNear && t > EPSILON);
-		tNear = t * g1 + tNear * (1-g1);
-		n = vec3(0, 0, -1) * g1 + n * (1-g1);
+		g1 = t < tNear && t > EPSILON;
+		tNear = t * uint(g1) + tNear * uint(!g1);
+		n = normals[5] * uint(g1) +  n * uint(!g1);
 
 		o = d * tNear + o;
 		tNear = INFINITY;

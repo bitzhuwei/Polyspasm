@@ -59,15 +59,6 @@ int locate(int node)
 	return int(texelFetch(octree, tc, 0).r);
 }
 
-const vec3	normals[6] = vec3[6](
-	vec3( 1, 0, 0),
-	vec3(-1, 0, 0),
-	vec3( 0, 1, 0),
-	vec3( 0,-1, 0),
-	vec3( 0, 0, 1),
-	vec3( 0, 0,-1)
-);
-
 /**
  * Ray-octree intersection test
  * Returns the intersecting block type
@@ -88,7 +79,7 @@ int intersect()
 	float	lev;
 	
 	float	x0, x1, y0, y1, z0, z1;
-	uint	nx, ny, nz, ni;
+	vec3	nx, ny, nz;
 
 	float	rdx = 1.0/d.x;
 	float	rdy = 1.0/d.y;
@@ -134,7 +125,7 @@ int intersect()
 		x1 = x1 * uint(g1) + INFINITY * uint(!g1);
 		g2 = x0 < x1;
 		x0 = x0 * uint(g2) + x1 * uint(!g2);
-		nx = 0u * uint(g2) + 1u * uint(!g2);
+		nx = vec3(1,0,0) * uint(g2) + vec3(-1,0,0) * uint(!g2);
 		
 		y0 = (l.y*lev - o.y) * rdy;
 		y1 = y0 + lev * rdy;
@@ -144,7 +135,7 @@ int intersect()
 		y1 = y1 * uint(g1) + INFINITY * uint(!g1);
 		g2 = y0 < y1;
 		y0 = y0 * uint(g2) + y1 * uint(!g2);
-		ny = 2u * uint(g2) + 3u * uint(!g2);
+		ny = vec3(0,1,0) * uint(g2) + vec3(0,-1,0) * uint(!g2);
 		
 		z0 = (l.z*lev - o.z) * rdz;
 		z1 = z0 + lev * rdz;
@@ -154,18 +145,17 @@ int intersect()
 		z1 = z1 * uint(g1) + INFINITY * uint(!g1);
 		g2 = z0 < z1;
 		z0 = z0 * uint(g2) + z1 * uint(!g2);
-		nz = 4u * uint(g2) + 5u * uint(!g2);
+		nz = vec3(0,0,1) * uint(g2) + vec3(0,0,-1) * uint(!g2);
 		
 		g2 = x0 < y0;
-		t  = x0 * uint(g2) + y0 * uint(!g2);
-		ni = nx * uint(g2) + ny * uint(!g2);
+		t = x0 * uint(g2) + y0 * uint(!g2);
+		n = nx * uint(g2) + ny * uint(!g2);
 		
 		g2 = t < z0;
-		t  =  t * uint(g2) + z0 * uint(!g2);
-		ni = ni * uint(g2) + nz * uint(!g2);
+		t = t * uint(g2) + z0 * uint(!g2);
+		n = n * uint(g2) + nz * uint(!g2);
 
 		o = d * t + o;
-		n = normals[ni];
 	}
 }
 

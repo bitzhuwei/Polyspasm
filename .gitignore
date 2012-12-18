@@ -11,3 +11,5 @@
 /report/*.d
 /report/*.fls
 *.swp
+/*.opensdf
+*.caw

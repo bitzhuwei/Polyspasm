@@ -71,13 +71,12 @@ int intersect()
 	
 	ivec3	x;
 	ivec3	l;
-	float	t;
 	
 	bool	g;
 	float	lev;
 	
 	float	x0, x1, y0, y1, z0, z1;
-	vec3	nx, ny, nz;
+	vec4	nx, ny, nz, nw;
 
 	float	rdx = 1.0/d.x;
 	float	rdy = 1.0/d.y;
@@ -118,30 +117,26 @@ int intersect()
 		x0 = (l.x*lev - o.x) * rdx;
 		x1 = x0 + lev * rdx;
 		g = (x0 > EPSILON && x0 < x1) || (x1 <= EPSILON);
-		x0 = x0 * uint(g) + x1 * uint(!g);
-		nx = vec3(1,0,0) * uint(g) + vec3(-1,0,0) * uint(!g);
+		nx = vec4(1,0,0,x0) * uint(g) + vec4(-1,0,0,x1) * uint(!g);
 		
 		y0 = (l.y*lev - o.y) * rdy;
 		y1 = y0 + lev * rdy;
 		g = (y0 > EPSILON && y0 < y1) || (y1 <= EPSILON);
-		y0 = y0 * uint(g) + y1 * uint(!g);
-		ny = vec3(0,1,0) * uint(g) + vec3(0,-1,0) * uint(!g);
+		ny = vec4(0,1,0,y0) * uint(g) + vec4(0,-1,0,y1) * uint(!g);
 		
 		z0 = (l.z*lev - o.z) * rdz;
 		z1 = z0 + lev * rdz;
 		g = (z0 > EPSILON && z0 < z1) || (z1 <= EPSILON);
-		z0 = z0 * uint(g) + z1 * uint(!g);
-		nz = vec3(0,0,1) * uint(g) + vec3(0,0,-1) * uint(!g);
+		nz = vec4(0,0,1,z0) * uint(g) + vec4(0,0,-1,z1) * uint(!g);
 		
-		g = (x0 > EPSILON && x0 < y0) || (y0 <= EPSILON);
-		t = x0 * uint(g) + y0 * uint(!g);
-		n = nx * uint(g) + ny * uint(!g);
+		g = (nx.w > EPSILON && nx.w < ny.w) || (ny.w <= EPSILON);
+		nw = nx * uint(g) + ny * uint(!g);
 		
-		g = (t > EPSILON && t < z0) || (z0 <= EPSILON);
-		t = t * uint(g) + z0 * uint(!g);
-		n = n * uint(g) + nz * uint(!g);
+		g = (nw.w > EPSILON && nw.w < nz.w) || (nz.w <= EPSILON);
+		nw = nw * uint(g) + nz * uint(!g);
 
-		o = d * t + o;
+		n = nw.xyz;
+		o = d * nw.w + o;
 	}
 }
 

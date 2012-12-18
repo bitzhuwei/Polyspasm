@@ -80,12 +80,15 @@ int intersect()
 	
 	ivec3	x;
 	ivec3	l;
-	float	tNear = INFINITY;
 	float	t;
 	
 	bool	g0;
 	bool	g1;
+	bool	g2;
 	float	lev;
+	
+	float	x0, x1, y0, y1, z0, z1;
+	uint	nx, ny, nz, ni;
 
 	float	rdx = 1.0/d.x;
 	float	rdy = 1.0/d.y;
@@ -123,37 +126,46 @@ int intersect()
 
 		lev = 1<<level;
 		
-		t = (l.x*lev - o.x) * rdx;
-		g0 = t > EPSILON;
-		tNear = t * uint(g0) + tNear * uint(!g0);
+		x0 = (l.x*lev - o.x) * rdx;
+		x1 = x0 + lev * rdx;
+		g0 = x0 > EPSILON;
+		g1 = x1 > EPSILON;
+		x0 = x0 * uint(g0) + INFINITY * uint(!g0);
+		x1 = x1 * uint(g1) + INFINITY * uint(!g1);
+		g2 = x0 < x1;
+		x0 = x0 * uint(g2) + x1 * uint(!g2);
+		nx = 0u * uint(g2) + 1u * uint(!g2);
 		
-		t += lev * rdx;
-		g1 = t < tNear && t > EPSILON;
-		tNear = t * uint(g1) + tNear * uint(!g1);
-		n = normals[1] * uint(g1) +  normals[0] * uint(!g1);
-
-		t = (l.y*lev - o.y) * rdy;
-		g0 = t < tNear && t > EPSILON;
-		tNear = t * uint(g0) + tNear * uint(!g0);
-		n = normals[2] * uint(g0) +  n * uint(!g0);
+		y0 = (l.y*lev - o.y) * rdy;
+		y1 = y0 + lev * rdy;
+		g0 = y0 > EPSILON;
+		g1 = y1 > EPSILON;
+		y0 = y0 * uint(g0) + INFINITY * uint(!g0);
+		y1 = y1 * uint(g1) + INFINITY * uint(!g1);
+		g2 = y0 < y1;
+		y0 = y0 * uint(g2) + y1 * uint(!g2);
+		ny = 2u * uint(g2) + 3u * uint(!g2);
 		
-		t += lev * rdy;
-		g1 = t < tNear && t > EPSILON;
-		tNear = t * uint(g1) + tNear * uint(!g1);
-		n = normals[3] * uint(g1) +  n * uint(!g1);
-
-		t = (l.z*lev - o.z) * rdz;
-		g0 = t < tNear && t > EPSILON;
-		tNear = t * uint(g0) + tNear * uint(!g0);
-		n = normals[4] * uint(g0) +  n * uint(!g0);
+		z0 = (l.z*lev - o.z) * rdz;
+		z1 = z0 + lev * rdz;
+		g0 = z0 > EPSILON;
+		g1 = z1 > EPSILON;
+		z0 = z0 * uint(g0) + INFINITY * uint(!g0);
+		z1 = z1 * uint(g1) + INFINITY * uint(!g1);
+		g2 = z0 < z1;
+		z0 = z0 * uint(g2) + z1 * uint(!g2);
+		nz = 4u * uint(g2) + 5u * uint(!g2);
 		
-		t += lev * rdz;
-		g1 = t < tNear && t > EPSILON;
-		tNear = t * uint(g1) + tNear * uint(!g1);
-		n = normals[5] * uint(g1) +  n * uint(!g1);
+		g2 = x0 < y0;
+		t  = x0 * uint(g2) + y0 * uint(!g2);
+		ni = nx * uint(g2) + ny * uint(!g2);
+		
+		g2 = t < z0;
+		t  =  t * uint(g2) + z0 * uint(!g2);
+		ni = ni * uint(g2) + nz * uint(!g2);
 
-		o = d * tNear + o;
-		tNear = INFINITY;
+		o = d * t + o;
+		n = normals[ni];
 	}
 }
 

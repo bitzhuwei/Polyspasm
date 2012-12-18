@@ -22,6 +22,13 @@ Usage
 * `LEFT`/`RIGHT` switches to the next/previous animation.
 * Press `R` to reload shaders.
 
+Report
+------
+
+There is a report in the `report` subdirectory with more details about
+the effects used in the demo, and some conclusions and thoughts about the
+development.
+
 Building
 --------
 

@@ -1,4 +1,5 @@
-#version 100
+// Removed version because it caused problems on nvidia
+//#version 100
 
 varying vec3	cameraRay;
 

@@ -59,3 +59,4 @@ Follow these steps to build after installing the required packages:
 3. `cd test`
 4. `../configure`
 5. `make`
+6. `./demo`

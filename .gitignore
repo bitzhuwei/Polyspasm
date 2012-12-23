@@ -12,4 +12,13 @@
 /report/*.fls
 *.swp
 /*.opensdf
-*.caw
+/*.caw
+/Makefile.in
+/Polyspasm.tar.gz
+/aclocal.m4
+/autom4te.cache
+/configure
+/depcomp
+/install-sh
+/missing
+/test

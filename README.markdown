@@ -42,14 +42,20 @@ Ubuntu
 
 Required packages:
 
+* autoconf
+* libtool
+* g++
 * libgl1-mesa-dev
 * libglu1-mesa-dev
 * libglew1.5-dev
+* libsdl1.2-dev
 * libsdl-mixer1.2-dev
+* libsdl-image1.2-dev
 
-Follow these steps to build (may require tweaking of Makefile.am):
+Follow these steps to build after installing the required packages:
 
-1. `./autogen.sh`
-2. `cd test`
-3. `../configure`
-4. `make`
+1. `sh autogen.sh`
+2. `mkdir test`
+3. `cd test`
+4. `../configure`
+5. `make`

@@ -46,7 +46,6 @@
 
 static bool	running = true;
 
-static void setup_audio();
 static void print_help();
 static TF3D* load_font(const char* fn);
 static void handle_event(SDL_Event* event);
@@ -83,7 +82,6 @@ static GLuint my_fbo;
 
 static std::vector<Animation*> animations;
 static Graphics* gfx;
-static Audio audio;
 
 static void integrate(double tdelta);
 
@@ -150,7 +148,6 @@ int wmain(int argc, wchar_t* argv[])
 		gfx = new Graphics(WINDOW_W, WINDOW_H);
 		gfx->setup(fullscreen);
 
-		audio.setup();
 
 #ifdef	TESTING
 		Mix_VolumeMusic(0);
@@ -436,7 +433,6 @@ static void shutdown()
 {
 	gfx->shutdown();
 	delete gfx;
-	audio.shutdown();
 	exit(0);
 }
 
@@ -496,7 +492,6 @@ static void restart()
 	g_current = 0;
 	g_next = 0;
 	setupAnimations();
-	audio.start();
 }
 
 /* pause/resume demo */
@@ -504,10 +499,8 @@ static void pauseunpause()
 {
 	if (g_state == DEMO_PLAYING) {
 		g_state = DEMO_PAUSED;
-		audio.pause();
 	} else if (g_state == DEMO_PAUSED) {
 		g_state = DEMO_PLAYING;
-		audio.resume();
 	} else {// DEMO_IDLE
 		g_state = DEMO_PLAYING;
 		g_time = 0;
@@ -515,7 +508,6 @@ static void pauseunpause()
 		g_duration = 0;
 		g_next_dur = 0;
 		setupAnimations();
-		audio.start();
 	}
 }
 

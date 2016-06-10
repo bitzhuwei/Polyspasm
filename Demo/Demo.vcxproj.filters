@@ -90,15 +90,6 @@
     <ClCompile Include="Animation.cpp">
       <Filter>Animations</Filter>
     </ClCompile>
-    <ClCompile Include="SobelAnimation.cpp">
-      <Filter>Animations</Filter>
-    </ClCompile>
-    <ClCompile Include="GreetingsAnimation.cpp">
-      <Filter>Animations</Filter>
-    </ClCompile>
-    <ClCompile Include="CreditsAnimation.cpp">
-      <Filter>Animations</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\cttf\bstree.h">

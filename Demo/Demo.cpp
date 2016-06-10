@@ -159,18 +159,18 @@ int wmain(int argc, wchar_t* argv[])
 		animations.push_back(new TitleAnimation());
 		PTAnimation* ptanim = new PTAnimation();
 		animations.push_back(ptanim);
-		animations.push_back(new FluidAnimation());
-		animations.push_back(new SkyAnimation());
-		animations.push_back(new SobelAnimation());
-		animations.push_back(new GreetingsAnimation());
-		animations.push_back(new CreditsAnimation());
+		animations.push_back(new FluidAnimation());// fire
+		//animations.push_back(new SkyAnimation());// water
+		//animations.push_back(new SobelAnimation());
+		//animations.push_back(new GreetingsAnimation());
+		//animations.push_back(new CreditsAnimation());
 #else
 		//animations.push_back(new TitleAnimation());
 		//animations.push_back(new SkyAnimation());
 		//animations.push_back(new FluidAnimation());
 		//animations.push_back(new SobelAnimation());
 		//animations.push_back(new GreetingsAnimation());
-		animations.push_back(new CreditsAnimation());
+		//animations.push_back(new CreditsAnimation());
 #endif
 
 		setupAnimations();

@@ -92,17 +92,14 @@
     <ClCompile Include="..\cttf\ttf.c" />
     <ClCompile Include="..\cttf\typeset.c" />
     <ClCompile Include="Animation.cpp" />
-    <ClCompile Include="CreditsAnimation.cpp" />
     <ClCompile Include="Demo.cpp" />
     <ClCompile Include="FluidAnimation.cpp" />
     <ClCompile Include="FrameBuffer.cpp" />
     <ClCompile Include="Graphics.cpp" />
-    <ClCompile Include="GreetingsAnimation.cpp" />
     <ClCompile Include="Octree.cpp" />
     <ClCompile Include="PTAnimation.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="SkyAnimation.cpp" />
-    <ClCompile Include="SobelAnimation.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TF3D.cpp" />
     <ClCompile Include="TitleAnimation.cpp" />

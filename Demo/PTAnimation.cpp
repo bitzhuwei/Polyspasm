@@ -27,7 +27,7 @@
 #include "BlockData.h"
 
 #if 1
-#define DURATION (0.29)
+#define DURATION (0.0)
 #define TRANS_WAIT (15.18)
 #else
 /* DEBUG */

@@ -23,7 +23,7 @@
 
 #if 1
 #define TITLE_WAIT (6.92)
-#define DURATION (15.57)
+#define DURATION (0.57)
 #define TRANS_WAIT (12.68)
 #else
 /* DEBUG */

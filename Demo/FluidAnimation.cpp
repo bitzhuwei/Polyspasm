@@ -61,7 +61,7 @@ FluidAnimation::FluidAnimation()
 	m_lines.push_back("not");
 	m_lines.push_back("ignite");
 	m_lines.push_back("your");
-	m_lines.push_back("computer");
+	m_lines.push_back("---___===+++Oo0");
 }
 
 void FluidAnimation::setup(Graphics& gfx)

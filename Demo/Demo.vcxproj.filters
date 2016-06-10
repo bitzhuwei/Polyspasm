@@ -78,9 +78,6 @@
     <ClCompile Include="PTAnimation.cpp">
       <Filter>Animations</Filter>
     </ClCompile>
-    <ClCompile Include="SkyAnimation.cpp">
-      <Filter>Animations</Filter>
-    </ClCompile>
     <ClCompile Include="TitleAnimation.cpp">
       <Filter>Animations</Filter>
     </ClCompile>

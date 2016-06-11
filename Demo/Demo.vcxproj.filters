@@ -75,9 +75,6 @@
     <ClCompile Include="Octree.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TitleAnimation.cpp">
-      <Filter>Animations</Filter>
-    </ClCompile>
     <ClCompile Include="FluidAnimation.cpp">
       <Filter>Animations</Filter>
     </ClCompile>

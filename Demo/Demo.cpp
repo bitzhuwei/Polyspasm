@@ -156,7 +156,7 @@ int wmain(int argc, wchar_t* argv[])
 
 		gfx->setFont(load_font(fn));
 #ifndef TESTING
-		animations.push_back(new TitleAnimation());
+		//animations.push_back(new TitleAnimation());
 		//PTAnimation* ptanim = new PTAnimation();
 		//animations.push_back(ptanim);
 		animations.push_back(new FluidAnimation());// fire

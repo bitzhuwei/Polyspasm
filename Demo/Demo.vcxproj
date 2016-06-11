@@ -100,7 +100,6 @@
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TF3D.cpp" />
-    <ClCompile Include="TitleAnimation.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\cttf\bstree.h" />

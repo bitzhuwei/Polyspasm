@@ -56,12 +56,12 @@ int perm256[] = { 151,160,137,91,90,15,
 FluidAnimation::FluidAnimation()
 	: Animation(DURATION, DURATION-TRANS_START)
 {
-	m_lines.push_back("Warning:");
-	m_lines.push_back("do");
-	m_lines.push_back("not");
-	m_lines.push_back("ignite");
-	m_lines.push_back("your");
-	m_lines.push_back("---___===+++Oo0");
+	//m_lines.push_back("Warning:");
+	//m_lines.push_back("do");
+	//m_lines.push_back("not");
+	//m_lines.push_back("ignite");
+	//m_lines.push_back("your");
+	m_lines.push_back("0123456789");
 }
 
 void FluidAnimation::setup(Graphics& gfx)
@@ -70,7 +70,7 @@ void FluidAnimation::setup(Graphics& gfx)
 	m_lastbeat = -1;
 
 	gfx.loadShader("fire");
-	gfx.loadShader("colorize");
+	//gfx.loadShader("colorize");
 	gfx.loadShader("normals");
 	gfx.loadShader("advect");
 	gfx.loadShader("buoyancy");

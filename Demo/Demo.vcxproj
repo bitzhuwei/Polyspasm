@@ -97,7 +97,6 @@
     <ClCompile Include="FrameBuffer.cpp" />
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="Octree.cpp" />
-    <ClCompile Include="PTAnimation.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TF3D.cpp" />

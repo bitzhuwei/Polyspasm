@@ -157,8 +157,8 @@ int wmain(int argc, wchar_t* argv[])
 		gfx->setFont(load_font(fn));
 #ifndef TESTING
 		animations.push_back(new TitleAnimation());
-		PTAnimation* ptanim = new PTAnimation();
-		animations.push_back(ptanim);
+		//PTAnimation* ptanim = new PTAnimation();
+		//animations.push_back(ptanim);
 		animations.push_back(new FluidAnimation());// fire
 		//animations.push_back(new SkyAnimation());// water
 		//animations.push_back(new SobelAnimation());
@@ -177,7 +177,7 @@ int wmain(int argc, wchar_t* argv[])
 
 #ifndef TESTING
 		// heat up pt
-		ptanim->renderToFBO(*gfx, 0, 0);
+		//ptanim->renderToFBO(*gfx, 0, 0);
 #endif
 
 	} catch (std::string msg) {

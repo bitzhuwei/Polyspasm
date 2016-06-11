@@ -107,7 +107,7 @@ int wmain(int argc, wchar_t* argv[])
 	const char*	fn = NULL;
 	bool		fullscreen = false;
 
-	fn = "../res/fonts/Pusselbit.ttf";
+	fn = "../res/fonts/malgun_boot.ttf";
 
 	setlocale(LC_ALL, "");
 

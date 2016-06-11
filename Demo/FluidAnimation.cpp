@@ -61,7 +61,7 @@ FluidAnimation::FluidAnimation()
 	//m_lines.push_back("not");
 	//m_lines.push_back("ignite");
 	//m_lines.push_back("your");
-	m_lines.push_back("0123456789");
+	m_lines.push_back("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
 }
 
 void FluidAnimation::setup(Graphics& gfx)

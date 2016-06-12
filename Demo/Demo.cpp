@@ -169,9 +169,6 @@ static void setupAnimations()
 
 static void main_loop()
 {
-	double	fps = 0;
-	size_t	frames = 0;
-	double	second = 0;
 	Uint32	ticks;
 
 	ticks = SDL_GetTicks();
@@ -184,15 +181,6 @@ static void main_loop()
 		diff = SDL_GetTicks() - ticks;
 		tdelta = diff / 1000.0;
 		ticks += diff;
-
-		frames += 1;
-		second += tdelta;
-		if (second > 1) {
-			fps = frames / second;
-			frames = 0;
-			second = 0;
-
-		}
 
 		int	prev_anim = g_current;
 		if (g_state == DEMO_PLAYING) {

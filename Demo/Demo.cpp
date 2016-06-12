@@ -155,7 +155,7 @@ int wmain(int argc, wchar_t* argv[])
 	setupAnimations();
 
 	beats.push_back(32.33);
-	
+
 	main_loop();
 
 	return 0;
@@ -174,103 +174,97 @@ static void main_loop()
 	double	second = 0;
 	Uint32	ticks;
 
-	try {
-		ticks = SDL_GetTicks();
-		while (running) {
-			SDL_Event event;
-			Uint32 diff;
-			double tdelta;
+	ticks = SDL_GetTicks();
+	while (running) {
+		SDL_Event event;
+		Uint32 diff;
+		double tdelta;
 
-			/* increment time */
-			diff = SDL_GetTicks() - ticks;
-			tdelta = diff / 1000.0;
-			ticks += diff;
+		/* increment time */
+		diff = SDL_GetTicks() - ticks;
+		tdelta = diff / 1000.0;
+		ticks += diff;
 
-			frames += 1;
-			second += tdelta;
-			if (second > 1) {
-				fps = frames / second;
-				frames = 0;
-				second = 0;
+		frames += 1;
+		second += tdelta;
+		if (second > 1) {
+			fps = frames / second;
+			frames = 0;
+			second = 0;
 
+		}
+
+		int	prev_anim = g_current;
+		if (g_state == DEMO_PLAYING) {
+			g_time += tdelta;
+			g_duration += tdelta;
+
+			size_t prev = g_current;
+			while (animations[g_current]->getDuration() <= g_duration) {
+				g_duration -= animations[g_current]->getDuration();
+				g_duration += g_next_dur;
+				g_next_dur = 0;
+				g_current = (g_current + 1) % animations.size();
 			}
 
-			int	prev_anim = g_current;
-			if (g_state == DEMO_PLAYING) {
-				g_time += tdelta;
-				g_duration += tdelta;
+			g_next = (g_current + 1) % animations.size();
 
-				size_t prev = g_current;
-				while (animations[g_current]->getDuration() <= g_duration) {
-					g_duration -= animations[g_current]->getDuration();
-					g_duration += g_next_dur;
-					g_next_dur = 0;
-					g_current = (g_current + 1) % animations.size();
-				}
-
-				g_next = (g_current + 1) % animations.size();
-
-				for (size_t i = g_beat; i < beats.size(); ++i) {
-					if (g_time > beats[i]) {
-						g_beat = i + 1;
-					}
-					else {
-						break;
-					}
-				}
-
-				if (g_current < prev) {
-					restart();
-				}
-			}
-
-			if (g_current != prev_anim) {
-				std::cout << "time: " << g_time << std::endl;
-				std::cout << "beat: " << g_beat << std::endl;
-			}
-
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-			if (g_state == DEMO_IDLE) {
-				g_time += tdelta;
-				for (size_t i = g_beat; i < beats.size(); ++i) {
-					if (g_time > beats[i]) {
-						g_beat = i + 1;
-					}
-					else {
-						break;
-					}
-				}
-				if (g_beat > 4) {
-					g_time -= beats[g_beat - 1];
-					g_beat = 0;
-				}
-				animations[g_current]->render(*gfx, fmod(g_time, animations[g_current]->getDuration()), g_beat, true);
-			}
-			else {
-				if (g_duration > animations[g_current]->getTransitionStart()) {
-					//g_next_dur = g_duration-animations[g_current]->getTransitionStart();
-					g_next_dur = 0;
-					animations[g_current]->renderTransition(*gfx, animations[g_next],
-						g_duration - animations[g_current]->getTransitionStart(), g_beat);
+			for (size_t i = g_beat; i < beats.size(); ++i) {
+				if (g_time > beats[i]) {
+					g_beat = i + 1;
 				}
 				else {
-					animations[g_current]->render(*gfx, g_duration, g_beat, false);
+					break;
 				}
 			}
 
-			gfx->swap_buffers();
-
-			integrate(tdelta);
-
-			while (SDL_PollEvent(&event)) {
-				handle_event(&event);
+			if (g_current < prev) {
+				restart();
 			}
 		}
-	}
-	catch (std::string msg) {
-		std::cerr << "Fatal exception:" << std::endl <<
-			msg << std::endl;
+
+		if (g_current != prev_anim) {
+			std::cout << "time: " << g_time << std::endl;
+			std::cout << "beat: " << g_beat << std::endl;
+		}
+
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		if (g_state == DEMO_IDLE) {
+			g_time += tdelta;
+			for (size_t i = g_beat; i < beats.size(); ++i) {
+				if (g_time > beats[i]) {
+					g_beat = i + 1;
+				}
+				else {
+					break;
+				}
+			}
+			if (g_beat > 4) {
+				g_time -= beats[g_beat - 1];
+				g_beat = 0;
+			}
+			animations[g_current]->render(*gfx, fmod(g_time, animations[g_current]->getDuration()), g_beat, true);
+		}
+		else {
+			if (g_duration > animations[g_current]->getTransitionStart()) {
+				//g_next_dur = g_duration-animations[g_current]->getTransitionStart();
+				g_next_dur = 0;
+				animations[g_current]->renderTransition(*gfx, animations[g_next],
+					g_duration - animations[g_current]->getTransitionStart(), g_beat);
+			}
+			else {
+				animations[g_current]->render(*gfx, g_duration, g_beat, false);
+			}
+		}
+
+		gfx->swap_buffers();
+
+		integrate(tdelta);
+
+		while (SDL_PollEvent(&event)) {
+			handle_event(&event);
+		}
 	}
 }
 

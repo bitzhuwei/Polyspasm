@@ -156,71 +156,8 @@ int wmain(int argc, wchar_t* argv[])
 
 	setupAnimations();
 
-	/* Init beat timings */
-	for (int i = 0; i < 16; ++i) {
-		beats.push_back(i*0.9584375 + 0.65);
-	}
-	for (int i = 0; i < 17; ++i) {
-		beats.push_back(i*0.9584375 + 15.57);
-	}
-	//beats.push_back(32.81);
 	beats.push_back(32.33);
-	for (int i = 0; i < 107; ++i) {
-		beats.push_back(i*0.9584375 + 33.29);
-	}
-	/*beats.push_back(0.19);
-	beats.push_back(1.16);
-	beats.push_back(2.13);
-	beats.push_back(3.09);
-	beats.push_back(4.05);
-	beats.push_back(5.01);
-	beats.push_back(5.97);
-	beats.push_back(6.92);
-	beats.push_back(7.90);
-	beats.push_back(8.86);
-	beats.push_back(9.80);
-	beats.push_back(10.77);
-	beats.push_back(11.74);
-	beats.push_back(12.68);
-	beats.push_back(13.66);
-	beats.push_back(14.61);
-	beats.push_back(15.57);
-	beats.push_back(16.54);
-	beats.push_back(17.48);
-	beats.push_back(18.46);
-	beats.push_back(19.41);
-	beats.push_back(20.37);
-	beats.push_back(21.31);
-	beats.push_back(22.27);
-	beats.push_back(23.22);
-	beats.push_back(24.18);
-	beats.push_back(25.14);
-	beats.push_back(26.09);
-	beats.push_back(27.04);
-	beats.push_back(28.01);
-	beats.push_back(28.98);
-	beats.push_back(29.93);
-	beats.push_back(30.89);
-	beats.push_back(31.85);
-	beats.push_back(32.81);
-	beats.push_back(33.77);
-	beats.push_back(34.73);
-	beats.push_back(35.69);
-	beats.push_back(36.65);
-	beats.push_back(37.61);
-	beats.push_back(38.58);
-	beats.push_back(39.53);
-	beats.push_back(40.49);
-	beats.push_back(41.45);
-	beats.push_back(42.41);
-	beats.push_back(43.37);
-	beats.push_back(44.33);
-	beats.push_back(45.29);
-	beats.push_back(46.25);
-	beats.push_back(47.21);
-	beats.push_back(48.17);
-	beats.push_back(49.13);*/
-
+	
 	main_loop();
 
 	return 0;

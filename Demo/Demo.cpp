@@ -92,8 +92,6 @@ double g_pos_z = 0;
 double g_vel_x = 0;
 double g_vel_z = 0;
 
-static bool g_show_fps = false;
-static bool g_slow_mo = false;
 static bool g_mute = false;
 
 static void setupAnimations();
@@ -169,36 +167,6 @@ static void setupAnimations()
 		animations[i]->setup(*gfx);
 }
 
-/* draw fps */
-static void draw_fps(double fps)
-{
-	std::ostringstream oss;
-	oss.setf(std::ios::fixed, std::ios::floatfield);
-	oss.precision(1);
-	oss << fps;
-	std::string str = oss.str();
-
-#if 0
-	gfx->bindShader("fps");
-
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	gluOrtho2D(0, 50, 0, 50);
-
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	glTranslatef((GLfloat)(50 - gfx->font()->width(str) - 0.2), 0.2f, 0);
-
-	glDisable(GL_DEPTH_TEST);
-	glDepthMask(0);
-
-	gfx->font()->render(gfx, str.c_str());
-
-	glDepthMask(1);
-	glEnable(GL_DEPTH_TEST);
-#endif
-}
-
 static void main_loop()
 {
 	double	fps = 0;
@@ -216,8 +184,6 @@ static void main_loop()
 			/* increment time */
 			diff = SDL_GetTicks() - ticks;
 			tdelta = diff / 1000.0;
-			if (g_slow_mo)
-				tdelta *= 0.5;
 			ticks += diff;
 
 			frames += 1;
@@ -227,15 +193,6 @@ static void main_loop()
 				frames = 0;
 				second = 0;
 
-				if (g_show_fps) {
-					std::ostringstream oss;
-					oss.setf(std::ios::fixed, std::ios::floatfield);
-					oss.precision(1);
-					oss << fps;
-					std::string str = oss.str();
-
-					std::cout << "fps: " << str << std::endl;
-				}
 			}
 
 			int	prev_anim = g_current;
@@ -301,9 +258,6 @@ static void main_loop()
 					animations[g_current]->render(*gfx, g_duration, g_beat, false);
 				}
 			}
-
-			if (g_show_fps)
-				draw_fps(fps);
 
 			gfx->swap_buffers();
 
@@ -466,14 +420,6 @@ static void on_key(SDLKey key, int down)
 	case SDLK_SPACE:
 		if (down)
 			pauseunpause();
-		break;
-	case SDLK_f:
-		if (down)
-			g_show_fps = !g_show_fps;
-		break;
-	case SDLK_t:
-		if (down)
-			g_slow_mo = !g_slow_mo;
 		break;
 	case SDLK_m:
 		if (down) {

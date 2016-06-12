@@ -101,13 +101,13 @@ static void setupAnimations();
 int wmain(int argc, wchar_t* argv[])
 {
 	/* seed RNG */
-	srand((unsigned) time(NULL));
+	srand((unsigned)time(NULL));
 
 	char		buf[512];
 	const char*	fn = NULL;
 	bool		fullscreen = false;
 
-	fn = "../res/fonts/malgun_boot.ttf";
+	fn = "../res/fonts/STCAIYUN.ttf";
 
 	setlocale(LC_ALL, "");
 
@@ -123,14 +123,17 @@ int wmain(int argc, wchar_t* argv[])
 			if (!cmd.compare(L"-h")) {
 				print_help();
 				exit(0);
-			} else if (!cmd.compare(L"-f")) {
+			}
+			else if (!cmd.compare(L"-f")) {
 				fullscreen = true;
-			} else {
+			}
+			else {
 				fprintf(stderr, "illegal option: %ws\n", argv[i]);
 				print_help();
 				exit(1);
 			}
-		} else {
+		}
+		else {
 			size_t	num;
 			size_t	lim = 512;
 			wcstombs_s(&num, buf, argv[i], lim);
@@ -144,46 +147,14 @@ int wmain(int argc, wchar_t* argv[])
 		exit(1);
 	}
 
-	try {
-		gfx = new Graphics(WINDOW_W, WINDOW_H);
-		gfx->setup(fullscreen);
+	gfx = new Graphics(WINDOW_W, WINDOW_H);
+	gfx->setup(fullscreen);
 
+	gfx->setFont(load_font(fn));
 
-#ifdef	TESTING
-		Mix_VolumeMusic(0);
-		g_mute = true;
-#endif
+	animations.push_back(new FluidAnimation());// fire
 
-		gfx->setFont(load_font(fn));
-#ifndef TESTING
-		//animations.push_back(new TitleAnimation());
-		//PTAnimation* ptanim = new PTAnimation();
-		//animations.push_back(ptanim);
-		animations.push_back(new FluidAnimation());// fire
-		//animations.push_back(new SkyAnimation());// water
-		//animations.push_back(new SobelAnimation());
-		//animations.push_back(new GreetingsAnimation());
-		//animations.push_back(new CreditsAnimation());
-#else
-		//animations.push_back(new TitleAnimation());
-		//animations.push_back(new SkyAnimation());
-		//animations.push_back(new FluidAnimation());
-		//animations.push_back(new SobelAnimation());
-		//animations.push_back(new GreetingsAnimation());
-		//animations.push_back(new CreditsAnimation());
-#endif
-
-		setupAnimations();
-
-#ifndef TESTING
-		// heat up pt
-		//ptanim->renderToFBO(*gfx, 0, 0);
-#endif
-
-	} catch (std::string msg) {
-		std::cerr << "Failed to initialize:" << std::endl <<
-			msg << std::endl;
-	}
+	setupAnimations();
 
 	/* Init beat timings */
 	for (int i = 0; i < 16; ++i) {
@@ -279,7 +250,7 @@ static void draw_fps(double fps)
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	glTranslatef((GLfloat) (50 - gfx->font()->width(str) - 0.2), 0.2f, 0);
+	glTranslatef((GLfloat)(50 - gfx->font()->width(str) - 0.2), 0.2f, 0);
 
 	glDisable(GL_DEPTH_TEST);
 	glDepthMask(0);
@@ -299,109 +270,114 @@ static void main_loop()
 	Uint32	ticks;
 
 	try {
-	ticks = SDL_GetTicks();
-	while (running) {
-		SDL_Event event;
-		Uint32 diff;
-		double tdelta;
+		ticks = SDL_GetTicks();
+		while (running) {
+			SDL_Event event;
+			Uint32 diff;
+			double tdelta;
 
-		/* increment time */
-		diff = SDL_GetTicks() - ticks;
-		tdelta = diff / 1000.0;
-		if (g_slow_mo)
-			tdelta *= 0.5;
-		ticks += diff;
+			/* increment time */
+			diff = SDL_GetTicks() - ticks;
+			tdelta = diff / 1000.0;
+			if (g_slow_mo)
+				tdelta *= 0.5;
+			ticks += diff;
 
-		frames += 1;
-		second += tdelta;
-		if (second > 1) {
-			fps = frames / second;
-			frames = 0;
-			second = 0;
+			frames += 1;
+			second += tdelta;
+			if (second > 1) {
+				fps = frames / second;
+				frames = 0;
+				second = 0;
 
-			if (g_show_fps) {
-				std::ostringstream oss;
-				oss.setf(std::ios::fixed, std::ios::floatfield);
-				oss.precision(1);
-				oss << fps;
-				std::string str = oss.str();
+				if (g_show_fps) {
+					std::ostringstream oss;
+					oss.setf(std::ios::fixed, std::ios::floatfield);
+					oss.precision(1);
+					oss << fps;
+					std::string str = oss.str();
 
-				std::cout << "fps: " << str << std::endl;
-			}
-		}
-
-		int	prev_anim = g_current;
-		if (g_state == DEMO_PLAYING) {
-			g_time += tdelta;
-			g_duration += tdelta;
-
-			size_t prev = g_current;
-			while (animations[g_current]->getDuration() <= g_duration) {
-				g_duration -= animations[g_current]->getDuration();
-				g_duration += g_next_dur;
-				g_next_dur = 0;
-				g_current = (g_current+1) % animations.size();
-			}
-
-			g_next = (g_current+1) % animations.size();
-
-			for (size_t i = g_beat; i < beats.size(); ++i) {
-				if (g_time > beats[i]) {
-					g_beat = i+1;
-				} else {
-					break;
+					std::cout << "fps: " << str << std::endl;
 				}
 			}
 
-			if (g_current < prev) {
-				restart();
-			}
-		}
+			int	prev_anim = g_current;
+			if (g_state == DEMO_PLAYING) {
+				g_time += tdelta;
+				g_duration += tdelta;
 
-		if (g_current != prev_anim) {
-			std::cout << "time: " << g_time << std::endl;
-			std::cout << "beat: " << g_beat << std::endl;
-		}
+				size_t prev = g_current;
+				while (animations[g_current]->getDuration() <= g_duration) {
+					g_duration -= animations[g_current]->getDuration();
+					g_duration += g_next_dur;
+					g_next_dur = 0;
+					g_current = (g_current + 1) % animations.size();
+				}
 
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+				g_next = (g_current + 1) % animations.size();
 
-		if (g_state == DEMO_IDLE) {
-			g_time += tdelta;
-			for (size_t i = g_beat; i < beats.size(); ++i) {
-				if (g_time > beats[i]) {
-					g_beat = i+1;
-				} else {
-					break;
+				for (size_t i = g_beat; i < beats.size(); ++i) {
+					if (g_time > beats[i]) {
+						g_beat = i + 1;
+					}
+					else {
+						break;
+					}
+				}
+
+				if (g_current < prev) {
+					restart();
 				}
 			}
-			if (g_beat > 4) {
-				g_time -= beats[g_beat-1];
-				g_beat = 0;
+
+			if (g_current != prev_anim) {
+				std::cout << "time: " << g_time << std::endl;
+				std::cout << "beat: " << g_beat << std::endl;
 			}
-			animations[g_current]->render(*gfx, fmod(g_time, animations[g_current]->getDuration()), g_beat, true);
-		} else {
-			if (g_duration > animations[g_current]->getTransitionStart()) {
-				//g_next_dur = g_duration-animations[g_current]->getTransitionStart();
-				g_next_dur = 0;
-				animations[g_current]->renderTransition(*gfx, animations[g_next],
-					g_duration-animations[g_current]->getTransitionStart(), g_beat);
-			} else {
-				animations[g_current]->render(*gfx, g_duration, g_beat, false);
+
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+			if (g_state == DEMO_IDLE) {
+				g_time += tdelta;
+				for (size_t i = g_beat; i < beats.size(); ++i) {
+					if (g_time > beats[i]) {
+						g_beat = i + 1;
+					}
+					else {
+						break;
+					}
+				}
+				if (g_beat > 4) {
+					g_time -= beats[g_beat - 1];
+					g_beat = 0;
+				}
+				animations[g_current]->render(*gfx, fmod(g_time, animations[g_current]->getDuration()), g_beat, true);
 			}
-		}
-		
-		if (g_show_fps)
-			draw_fps(fps);
+			else {
+				if (g_duration > animations[g_current]->getTransitionStart()) {
+					//g_next_dur = g_duration-animations[g_current]->getTransitionStart();
+					g_next_dur = 0;
+					animations[g_current]->renderTransition(*gfx, animations[g_next],
+						g_duration - animations[g_current]->getTransitionStart(), g_beat);
+				}
+				else {
+					animations[g_current]->render(*gfx, g_duration, g_beat, false);
+				}
+			}
 
-		gfx->swap_buffers();
+			if (g_show_fps)
+				draw_fps(fps);
 
-		integrate(tdelta);
+			gfx->swap_buffers();
 
-		while (SDL_PollEvent(&event)) {
-			handle_event(&event);
+			integrate(tdelta);
+
+			while (SDL_PollEvent(&event)) {
+				handle_event(&event);
+			}
 		}
 	}
-	} catch (std::string msg) {
+	catch (std::string msg) {
 		std::cerr << "Fatal exception:" << std::endl <<
 			msg << std::endl;
 	}
@@ -423,7 +399,8 @@ TF3D* load_font(const char* fn)
 		font = new TF3D(fn);
 		//font->prepare_string("0123456789.abcdefghijklmnopqrstuvxyz");
 		std::cout << "  :done" << std::endl;
-	} catch (std::string str) {
+	}
+	catch (std::string str) {
 		errx(1, str.c_str());
 	}
 	return font;
@@ -450,7 +427,7 @@ void handle_event(SDL_Event* event)
 	static int cx = 0;
 	static int cy = 0;
 	static bool	mousedown = false;
-	switch(event->type) {
+	switch (event->type) {
 	case SDL_MOUSEBUTTONDOWN:
 		mousedown = true;
 		break;
@@ -459,8 +436,8 @@ void handle_event(SDL_Event* event)
 		break;
 	case SDL_MOUSEMOTION:
 		if (mousedown) {
-			g_mouse_x += (event->motion.x-cx) / (double)gfx->width();
-			g_mouse_y += (event->motion.y-cy) / (double)gfx->height();
+			g_mouse_x += (event->motion.x - cx) / (double)gfx->width();
+			g_mouse_y += (event->motion.y - cy) / (double)gfx->height();
 		}
 		cx = event->motion.x;
 		cy = event->motion.y;
@@ -499,9 +476,11 @@ static void pauseunpause()
 {
 	if (g_state == DEMO_PLAYING) {
 		g_state = DEMO_PAUSED;
-	} else if (g_state == DEMO_PAUSED) {
+	}
+	else if (g_state == DEMO_PAUSED) {
 		g_state = DEMO_PLAYING;
-	} else {// DEMO_IDLE
+	}
+	else {// DEMO_IDLE
 		g_state = DEMO_PLAYING;
 		g_time = 0;
 		g_beat = 0;
@@ -513,7 +492,7 @@ static void pauseunpause()
 
 static void on_key(SDLKey key, int down)
 {
-	switch(key) {
+	switch (key) {
 	case SDLK_q:
 		if (down)
 			running = false;
@@ -524,7 +503,7 @@ static void on_key(SDLKey key, int down)
 		break;
 	case SDLK_RIGHT:
 		if (down) {
-			g_current = (g_current+1)%animations.size();
+			g_current = (g_current + 1) % animations.size();
 			g_time = 0;
 			g_duration = 0;
 			g_next_dur = 0;
@@ -535,7 +514,7 @@ static void on_key(SDLKey key, int down)
 	case SDLK_LEFT:
 		if (down) {
 			if (g_current > 0)
-				g_current = g_current-1;
+				g_current = g_current - 1;
 			g_time = 0;
 			g_duration = 0;
 			g_next_dur = 0;

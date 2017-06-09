@@ -1,16 +1,16 @@
 Polyspasm
 =========
-
+![Polyspase](https://github.com/bitzhuwei/Polyspasm/blob/master/Polyspasm.png?raw=true)  
 Polyspasm is a demo I created in late 2012 for the course
 EDAN35 High Performance Computer Graphics.
 
 The code is written in C++ and is quite ugly due to the time requirements
 that I was working with.
 
-The song used is Kung Fu Goldfish by Linus "lft" Åkesson.
+The song used is Kung Fu Goldfish by Linus "lft" Ã…kesson.
 Parts of the Minecraft map Broville v10 by oldshoes are also used in the demo.
 
-All code is copyright of Jesper Öqvist, and distributed under the GPLv2 license.
+All code is copyright of Jesper Ã–qvist, and distributed under the GPLv2 license.
 See the LICENSE file for the full GPLv2 license.
 
 Usage
